@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#080b18">
+
+  <title>Yasaswini | Developer Profile</title>
+
+  <!-- React 18 -->
+  <script crossorigin
+    src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin
+    src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+
+  <!-- Babel -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Segoe UI", Arial, sans-serif;
+    }
+
+    button,
+    a {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    button:focus-visible,
+    a:focus-visible {
+      outline: 3px solid #67e8f9;
+      outline-offset: 4px;
+    }
+
+    /* Page backgrounds */
+
+    .page-bg {
+      background:
+        radial-gradient(
+          circle at 12% 15%,
+          rgba(124, 58, 237, 0.23),
+          transparent 34%
+        ),
+        radial-gradient(
+          circle at 90% 85%,
+          rgba(6, 182, 212, 0.16),
+          transparent 35%
+        ),
+        #080b18;
+    }
+
+    .light-bg {
+      background:
+        radial-gradient(
+          circle at 10% 10%,
+          rgba(167, 139, 250, 0.25),
+          transparent 35%
+        ),
+        radial-gradient(
+          circle at 90% 90%,
+          rgba(103, 232, 249, 0.22),
+          transparent 35%
+        ),
+        #f1f3ff;
+    }
+
+    /* Main card */
+
+    .profile-card {
+      width: 100%;
+      max-width: 680px;
+      overflow: hidden;
+      border-radius: 32px;
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      transition:
+        background 0.35s ease,
+        border-color 0.35s ease,
+        box-shadow 0.35s ease;
+    }
+
+    /* Hero section */
+
+    .hero-section {
+      position: relative;
+      isolation: isolate;
+      overflow: hidden;
+      padding: 38px 40px 42px;
+      min-height: 300px;
+      background:
+        linear-gradient(
+          135deg,
+          rgba(91, 55, 190, 0.98),
+          rgba(43, 39, 111, 0.98) 55%,
+          rgba(16, 55, 103, 0.98)
+        );
+    }
+
+    .hero-section::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      opacity: 0.13;
+      background-image:
+        linear-gradient(rgba(255,255,255,.35) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.35) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+
+    .hero-orb {
+      position: absolute;
+      z-index: -1;
+      border: 1px solid rgba(255,255,255,.15);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .hero-orb-one {
+      width: 240px;
+      height: 240px;
+      right: -85px;
+      top: -115px;
+    }
+
+    .hero-orb-two {
+      width: 170px;
+      height: 170px;
+      right: 40px;
+      bottom: -125px;
+    }
+
+    .brand-text {
+      color: #e9e4ff;
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: 3px;
+    }
+
+    .brand-highlight {
+      color: #67e8f9;
+    }
+
+    .hero-title {
+      max-width: 500px;
+      margin-top: 36px;
+      color: white;
+      font-size: clamp(36px, 7vw, 52px);
+      line-height: 1.08;
+      font-weight: 900;
+      letter-spacing: -1.8px;
+    }
+
+    .hero-gradient {
+      display: block;
+      color: #67e8f9;
+    }
+
+    .hero-subtitle {
+      max-width: 440px;
+      margin-top: 14px;
+      color: rgba(238, 242, 255, 0.82);
+      font-size: 16px;
+      line-height: 1.7;
+    }
+
+    .profile-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      padding: 10px 15px;
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: 999px;
+      background: rgba(255,255,255,.10);
+      color: white;
+      font-size: 12px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .status-dot {
+      width: 9px;
+      height: 9px;
+      flex-shrink: 0;
+      border-radius: 50%;
+      background: #34d399;
+      box-shadow: 0 0 12px rgba(52,211,153,.6);
+    }
+
+    /* Avatar */
+
+    .avatar-ring {
+      display: inline-flex;
+      padding: 5px;
+      border-radius: 50%;
+      background: linear-gradient(
+        135deg,
+        #a78bfa,
+        #38bdf8,
+        #c084fc
+      );
+      box-shadow: 0 0 32px rgba(139, 92, 246, 0.35);
+    }
+
+    .avatar-image {
+      display: block;
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      object-fit: cover;
+      object-position: center;
+      background: #111827;
+    }
+
+    .avatar-fallback {
+      display: flex;
+      width: 150px;
+      height: 150px;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #312e81, #0e7490);
+      color: white;
+      font-size: 42px;
+      font-weight: 900;
+    }
+
+    /* Text */
+
+    .gradient-text {
+      background: linear-gradient(90deg, #c4b5fd, #67e8f9);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .section-heading {
+      margin-bottom: 14px;
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+
+    .body-copy {
+      font-size: 15px;
+      line-height: 1.9;
+    }
+
+    /* Skills */
+
+    .skill-chip {
+      padding: 10px 17px;
+      border: 1px solid;
+      border-radius: 14px;
+      font-size: 14px;
+      font-weight: 700;
+      transition: 0.25s ease;
+    }
+
+    .skill-chip:hover {
+      transform: translateY(-4px);
+    }
+
+    /* Buttons */
+
+    .connect-button {
+      display: flex;
+      width: 100%;
+      min-height: 54px;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      border-radius: 14px;
+      background: linear-gradient(100deg, #7c3aed, #2563eb);
+      color: white;
+      font-size: 15px;
+      font-weight: 800;
+      text-decoration: none;
+      transition: 0.25s ease;
+    }
+
+    .connect-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 28px rgba(99, 70, 229, 0.35);
+    }
+
+    .like-button {
+      width: 100%;
+      min-height: 52px;
+      border: 1px solid;
+      border-radius: 14px;
+      font-size: 15px;
+      font-weight: 700;
+      transition: 0.25s ease;
+    }
+
+    .like-button:hover {
+      transform: translateY(-2px);
+    }
+
+    /* Social links */
+
+    .social-link {
+      display: inline-flex;
+      width: 54px;
+      height: 54px;
+      align-items: center;
+      justify-content: center;
+      border-radius: 15px;
+      transition: 0.25s ease;
+    }
+
+    .social-link:hover {
+      transform: translateY(-4px) scale(1.05);
+    }
+
+    /* Theme button */
+
+    .theme-button {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 30;
+      display: flex;
+      width: 46px;
+      height: 46px;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid;
+      border-radius: 50%;
+      font-size: 20px;
+      box-shadow: 0 8px 25px rgba(0,0,0,.15);
+      transition: 0.25s ease;
+    }
+
+    .theme-button:hover {
+      transform: rotate(15deg) scale(1.08);
+    }
+
+    /* Floating decoration */
+
+    .floating-dot {
+      position: fixed;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      opacity: 0.7;
+      animation: float 5s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-13px);
+      }
+    }
+
+    /* Mobile layout */
+
+    @media (max-width: 600px) {
+      .page-shell {
+        padding: 18px 12px !important;
+      }
+
+      .profile-card {
+        border-radius: 24px;
+      }
+
+      .hero-section {
+        min-height: 285px;
+        padding: 28px 22px 32px;
+      }
+
+      .hero-title {
+        margin-top: 42px;
+        font-size: clamp(35px, 10vw, 46px);
+      }
+
+      .hero-subtitle {
+        font-size: 14px;
+      }
+
+      .profile-tag {
+        padding: 8px 11px;
+        font-size: 10px;
+      }
+
+      .avatar-image,
+      .avatar-fallback {
+        width: 132px;
+        height: 132px;
+      }
+
+      .avatar-fallback {
+        font-size: 36px;
+      }
+
+      .profile-content {
+        padding-left: 22px !important;
+        padding-right: 22px !important;
+      }
+
+      .profile-name {
+        font-size: 30px !important;
+      }
+
+      .role-text {
+        font-size: 14px !important;
+        line-height: 1.7;
+      }
+
+      .theme-button {
+        top: 12px;
+        right: 12px;
+        width: 40px;
+        height: 40px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="root"></div>
+
+  <script type="text/babel">
+
+    const { useState } = React;
+
+    // ==========================================
+    // REUSABLE PROFILE CARD COMPONENT
+    // ==========================================
+
+    function ProfileCard({
+      name,
+      role,
+      bio,
+      skills,
+      avatar,
+      github,
+      linkedin
+    }) {
+
+      // Dark / Light theme state
+      const [isDark, setIsDark] = useState(true);
+
+      // Like counter state
+      const [likes, setLikes] = useState(0);
+      const [isLiked, setIsLiked] = useState(false);
+
+      // Avatar fallback state
+      const [avatarFailed, setAvatarFailed] = useState(false);
+
+      // Theme toggle
+      const toggleTheme = () => {
+        setIsDark(previous => !previous);
+      };
+
+      // Like / Unlike functionality
+      const toggleLike = () => {
+        setIsLiked(previous => !previous);
+
+        setLikes(previous =>
+          isLiked ? Math.max(0, previous - 1) : previous + 1
+        );
+      };
+
+      return (
+
+        <main className={`page-shell page-bg min-h-screen w-full flex items-center justify-center p-6 sm:p-8 transition-colors duration-500 ${
+          isDark ? 'page-bg text-white' : 'light-bg text-gray-900'
+        }`}>
+
+          {/* Decorative background elements */}
+
+          <div className="floating-dot bg-purple-400 top-24 left-8"></div>
+          <div className="floating-dot bg-cyan-400 bottom-24 right-10"></div>
+
+          {/* Theme toggle */}
+
+          <button
+            type="button"
+            onClick={toggleTheme}
+            className={`theme-button ${
+              isDark
+                ? 'bg-white/10 border-white/20 text-white'
+                : 'bg-white border-gray-200 text-gray-900'
+            }`}
+            title={isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+            aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+          >
+            {isDark ? '☀️' : '🌙'}
+          </button>
+
+          {/* Main profile card */}
+
+          <section className={`profile-card relative z-10 border shadow-2xl ${
+            isDark
+              ? 'bg-white/[0.06] border-white/10 shadow-black/40'
+              : 'bg-white/85 border-white shadow-purple-200/50'
+          }`}>
+
+            {/* Hero section */}
+
+            <header className="hero-section">
+
+              <div className="hero-orb hero-orb-one"></div>
+              <div className="hero-orb hero-orb-two"></div>
+
+              <div className="flex items-center justify-between gap-4 flex-wrap">
+
+                <div className="brand-text">
+                  YASASWINI<span className="brand-highlight">.DEV</span>
+                </div>
+
+                <div className="profile-tag">
+                  <span className="status-dot"></span>
+                  DEVELOPER PROFILE
+                </div>
+
+              </div>
+
+              <p className="mt-9 text-sm sm:text-base font-bold tracking-[3px] text-purple-100">
+                HELLO, WORLD! ✨
+              </p>
+
+              <h1 className="hero-title">
+                Code. Create.
+                <span className="hero-gradient">Innovate.</span>
+              </h1>
+
+              <p className="hero-subtitle">
+                Turning creative ideas into meaningful digital experiences.
+              </p>
+
+            </header>
+
+            {/* Profile content */}
+
+            <div className="profile-content px-7 sm:px-11 pb-9">
+
+              {/* Avatar - placed below hero to prevent overlap */}
+
+              <div className="flex justify-center pt-7">
+
+                <div className="avatar-ring">
+
+                  {avatarFailed ? (
+
+                    <div className="avatar-fallback" aria-label="Avatar fallback">
+                      SY
+                    </div>
+
+                  ) : (
+
+                    <img
+                      src={avatar}
+                      alt={`Illustrated developer avatar of ${name}`}
+                      className="avatar-image"
+                      onError={() => setAvatarFailed(true)}
+                    />
+
+                  )}
+
+                </div>
+
+              </div>
+
+              {/* Name and role */}
+
+              <div className="text-center mt-7">
+
+                <div className={`inline-flex items-center justify-center gap-2 px-4 py-2 rounded-full text-xs font-bold mb-5 ${
+                  isDark
+                    ? 'bg-emerald-400/10 text-emerald-300 border border-emerald-400/20'
+                    : 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                }`}>
+
+                  <span className="status-dot"></span>
+                  OPEN TO LEARNING & OPPORTUNITIES
+
+                </div>
+
+                <h2 className="profile-name text-4xl font-extrabold tracking-tight gradient-text">
+                  {name}
+                </h2>
+
+                <p className={`role-text mt-3 text-base font-semibold ${
+                  isDark ? 'text-gray-300' : 'text-gray-600'
+                }`}>
+                  {role}
+                </p>
+
+              </div>
+
+              {/* Divider */}
+
+              <div className={`h-px my-8 ${
+                isDark ? 'bg-white/10' : 'bg-gray-200'
+              }`}></div>
+
+              {/* About me */}
+
+              <section className="mb-8">
+
+                <h3 className={`section-heading ${
+                  isDark ? 'text-purple-300' : 'text-purple-700'
+                }`}>
+                  About Me
+                </h3>
+
+                <p className={`body-copy ${
+                  isDark ? 'text-gray-300' : 'text-gray-600'
+                }`}>
+                  {bio}
+                </p>
+
+              </section>
+
+              {/* Tech stack */}
+
+              <section className="mb-8">
+
+                <h3 className={`section-heading ${
+                  isDark ? 'text-purple-300' : 'text-purple-700'
+                }`}>
+                  Tech Stack
+                </h3>
+
+                <div className="flex flex-wrap gap-3">
+
+                  {skills.map((skill, index) => (
+
+                    <span
+                      key={`${skill}-${index}`}
+                      className={`skill-chip ${
+                        isDark
+                          ? 'bg-white/[0.06] border-white/10 text-gray-200 hover:bg-purple-500/20'
+                          : 'bg-purple-50 border-purple-100 text-purple-800 hover:bg-purple-100'
+                      }`}
+                    >
+                      {skill}
+                    </span>
+
+                  ))}
+
+                </div>
+
+              </section>
+
+              {/* Connect button */}
+
+              <a
+                href={linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="connect-button mb-4"
+              >
+                Let's Connect
+                <span aria-hidden="true">→</span>
+              </a>
+
+              {/* Like counter */}
+
+              <button
+                type="button"
+                onClick={toggleLike}
+                className={`like-button ${
+                  isDark
+                    ? 'border-white/15 bg-white/[0.04] text-gray-200 hover:bg-white/10'
+                    : 'border-purple-100 bg-purple-50 text-purple-800 hover:bg-purple-100'
+                }`}
+                aria-pressed={isLiked}
+                aria-label={`${isLiked ? 'Unlike' : 'Like'} this profile. ${likes} likes`}
+              >
+                {isLiked ? '❤️ Liked' : '🤍 Like'} · {likes}
+              </button>
+
+              {/* Social links */}
+
+              <section className="mt-8">
+
+                <h3 className={`text-center text-xs font-bold uppercase tracking-[3px] mb-5 ${
+                  isDark ? 'text-gray-400' : 'text-gray-500'
+                }`}>
+                  Find Me Online
+                </h3>
+
+                <div className="flex justify-center gap-5">
+
+                  {/* GitHub */}
+
+                  <a
+                    href={github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Visit GitHub profile"
+                    className={`social-link ${
+                      isDark
+                        ? 'bg-white/10 text-white hover:bg-purple-500'
+                        : 'bg-gray-100 text-gray-900 hover:bg-purple-200'
+                    }`}
+                  >
+
+                    <svg
+                      className="w-7 h-7"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                      aria-hidden="true"
+                    >
+                      <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945 0 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+                    </svg>
+
+                  </a>
+
+                  {/* LinkedIn */}
+
+                  <a
+                    href={linkedin}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Visit LinkedIn profile"
+                    className={`social-link ${
+                      isDark
+                        ? 'bg-white/10 text-white hover:bg-blue-600'
+                        : 'bg-gray-100 text-gray-900 hover:bg-blue-200'
+                    }`}
+                  >
+
+                    <svg
+                      className="w-7 h-7"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                      aria-hidden="true"
+                    >
+                      <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM5.337 7.433C4.193 7.433 3.274 6.507 3.274 5.368c0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065z"/>
+                    </svg>
+
+                  </a>
+
+                </div>
+
+              </section>
+
+              {/* Footer */}
+
+              <footer className={`mt-9 pt-6 border-t text-center ${
+                isDark ? 'border-white/10' : 'border-gray-200'
+              }`}>
+
+                <p className={`text-xs ${
+                  isDark ? 'text-gray-400' : 'text-gray-500'
+                }`}>
+                  Designed with creativity. Built with React.
+                </p>
+
+                <p className={`text-xs mt-2 ${
+                  isDark ? 'text-gray-500' : 'text-gray-400'
+                }`}>
+                  © 2026 Kaluva Sudha Yasaswini
+                </p>
+
+              </footer>
+
+            </div>
+
+          </section>
+
+        </main>
+
+      );
+
+    }
+
+
+    // ==========================================
+    // PROFILE DATA - PASSED THROUGH PROPS
+    // ==========================================
+
+    const profileData = {
+
+      name: "Kaluva Sudha Yasaswini",
+
+      role: "Aspiring Software Engineer | Full Stack & AI Developer",
+
+      bio: "I am an Information Technology student passionate about building creative web applications and AI-powered solutions. I enjoy learning new technologies and transforming innovative ideas into practical projects.",
+
+      skills: [
+        "Python",
+        "React",
+        "AI / ML"
+      ],
+
+      // Keep the avatar inside the assets folder.
+      avatar: "./assets/developer-avatar.png",
+
+      github: "https://github.com/yasaswinikaluva-24",
+
+      linkedin: "https://www.linkedin.com/in/sudha-yasaswini-kaluva-0014043b7/"
+
+    };
+
+
+    // ==========================================
+    // RENDER REACT APPLICATION
+    // ==========================================
+
+    const root = ReactDOM.createRoot(
+      document.getElementById("root")
+    );
+
+    root.render(
+      <ProfileCard {...profileData} />
+    );
+
+  </script>
+
+</body>
+</html>
